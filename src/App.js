@@ -8,10 +8,16 @@ const Wrapper = styled.div`
   width: 100%;
   height: 100vh;
   display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
   background-color : ${props => props.backgroundColor};
   transition: background-color 1000ms linear;
 `
+const Button = styled.button`
+	margin-top: 20px
+`
+
 // #3DCCC6 #82B2FF #8F94FB #F772B4 #F76767
 const colorLevel = {
   0: "#3DCCC6",
@@ -20,6 +26,7 @@ const colorLevel = {
   3: "#F772B4",
   4: "#F76767",
 }
+
 class App extends Component {
   state = {
     backgroundColor: "#3DCCC6"
@@ -60,10 +67,16 @@ class App extends Component {
       animation.play()
     })
   }
+
+  startFunction = () => {
+    	console.log("youpi");
+    }
+
   render() {
     return (
       <Wrapper backgroundColor={this.state.backgroundColor}>
       	<Illustration />
+	  	<Button onClick={this.startFunction}>START</Button>
       </Wrapper>
     );
   }
