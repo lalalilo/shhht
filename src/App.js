@@ -6,19 +6,18 @@ import anime from 'animejs';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Slider from 'material-ui/Slider';
+import RaisedButton from 'material-ui/RaisedButton';
 
 const Wrapper = styled.div`
-  width: 100%;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background-color : ${props => props.backgroundColor};
-  transition: background-color 1000ms linear;
-`
-const Button = styled.button`
-	margin-top: 20px
+width: 100%;
+height: 100%;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+background-color : ${props => props.backgroundColor};
+transition: background-color 1000ms linear;
+padding-bottom: 20px;
 `
 const muiTheme = getMuiTheme({
   slider: {
@@ -54,7 +53,8 @@ const levelLabels = {
   3: "convivial",
   4: "dynamique",
 }
-  
+
+const socket = io(process.env.NODE_ENV === 'production' ? 'https://speech.lalilo.com/shhht' : 'http://localhost:5000/shhht')
 
 class App extends Component {
   state = {
@@ -86,11 +86,12 @@ class App extends Component {
   	});
 
     const whenFinished = () => {
-      console.log("anim.completed");
       this.setState({isFinished: true})
     }
+  }
 
-    const socket = io(process.env.NODE_ENV === 'production' ? 'https://speech.lalilo.com/shhht' : 'http://localhost:5000/shhht')
+  startFunction = () => {
+    this.setState({isStarted: true})
     navigator.mediaDevices.getUserMedia({
       audio: {
         sampleSize: 16,
@@ -116,16 +117,9 @@ class App extends Component {
       }
       else if(this.state.isStarted){
         this.animation.play()
-        console.log(this.state.animationDuration);
-
       }
     })
   }
-
-  startFunction = () => {
-    this.setState({isStarted: true})
-  }
-
 
   restartFunction = () => {
      console.log("yep, cette fonction est à faire")
@@ -136,7 +130,7 @@ class App extends Component {
       return (
         <Wrapper backgroundColor={this.state.backgroundColor}>
           BRAVO
-          <Button onClick={this.restartFunction}>RESTART</Button>
+          <RaisedButton onClick={this.restartFunction}>RESTART</RaisedButton>
         </Wrapper>
       );
     }
@@ -165,7 +159,33 @@ class App extends Component {
               onChange={(event, newValue) => this.setState({level: newValue})}
               step={1}
             />
-            <Button onClick={this.startFunction}>START</Button>
+            <RaisedButton
+              style={{
+                height: 60,
+                lineHeight: '60px',
+                borderRadius: '30px',
+                minWidth: '130px',
+                boxShadow: 'none'
+              }}
+              buttonStyle={{
+                borderRadius: '30px',
+                color: '#82b2ff',
+                fontWeight: 'bold',
+              }}
+              overlayStyle={{
+                height: 60,
+                borderRadius: '30px',
+                minWidth: '130px'
+              }}
+              labelStyle={{
+                padding: '0 25px',
+                fontSize: '16px',
+                color: '#82b2ff'
+              }}
+              onClick={this.startFunction}
+            >
+              C'est parti !
+            </RaisedButton>
           </Wrapper>
         </MuiThemeProvider>
       );
