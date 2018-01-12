@@ -3,6 +3,9 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
+import io from 'socket.io-client';
+
+const socket = io('https://speech.staging.lalilo.com/shhht')
 
 export const record = () => {
   return navigator.mediaDevices.getUserMedia({
@@ -14,9 +17,9 @@ export const record = () => {
   })
   .then(stream => {
     const mediaRecorder = new MediaRecorder(stream)
-    mediaRecorder.start(100)
+    mediaRecorder.start(250)
     mediaRecorder.ondataavailable = (event) => {
-      console.log('coucou')
+      socket.emit('message', new Blob([event.data], { 'type' : 'audio/ogg; codecs=opus' }))
     }
   })
 }
