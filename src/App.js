@@ -107,6 +107,7 @@ class App extends Component {
     })
 
     socket.on('level', (level) => {
+      console.log('level', level)
       const color = colorLevel[Math.round(level)]
 
       this.setState({backgroundColor: color})
