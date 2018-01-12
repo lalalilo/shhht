@@ -3,6 +3,9 @@ import Illustration from './illustration';
 import styled from 'styled-components';
 import io from 'socket.io-client';
 import anime from 'animejs';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import Slider from 'material-ui/Slider';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -17,8 +20,28 @@ const Wrapper = styled.div`
 const Button = styled.button`
 	margin-top: 20px
 `
+const muiTheme = getMuiTheme({
+  slider: {
+    selectionColor: '#FFFFFF',
+    trackColor: 'rgba(255,255,255,0.3)',
+    trackColorSelected: 'rgba(255,255,255,0.3)',
+    trackSize: 5,
+    handleSize: 16,
+  },
+  ripple: {
+    color: 'red',
+  },
+});
 
-// #3DCCC6 #82B2FF #8F94FB #F772B4 #F76767
+const Title = styled.h3`
+color: white;
+font-size: 28px;
+`
+
+const Strong = styled.strong`
+font-size: 38px;
+`
+
 const colorLevel = {
   0: "#3DCCC6",
   1: "#82B2FF",
@@ -26,13 +49,22 @@ const colorLevel = {
   3: "#F772B4",
   4: "#F76767",
 }
+
+const levelLabels = {
+  0: "très calme",
+  1: "calme",
+  2: "détendu",
+  3: "convivial",
+  4: "dynamique",
+}
   
 
 class App extends Component {
   state = {
     backgroundColor: "#3DCCC6",
-    isStarted: false,
     isFinished: false
+    level: 1,
+    isStarted: false
   }
 
   componentDidUpdate () {
@@ -60,7 +92,6 @@ class App extends Component {
     }
 
     const socket = io(process.env.NODE_ENV === 'production' ? 'https://speech.lalilo.com/shhht' : 'http://localhost:5000/shhht')
-    console.log(socket)
     navigator.mediaDevices.getUserMedia({
       audio: {
         sampleSize: 16,
@@ -80,7 +111,7 @@ class App extends Component {
       const color = colorLevel[Math.round(level)]
 
       this.setState({backgroundColor: color})
-      if (level > 1.5) {
+      if (level > this.state.level) {
         return this.animation.pause()
       }
       else if(this.state.isStarted){
@@ -99,6 +130,7 @@ class App extends Component {
   }
 
   render() {
+<<<<<<< HEAD
     if(this.state.isFinished){
       return (
         <Wrapper backgroundColor={this.state.backgroundColor}>
@@ -115,6 +147,26 @@ class App extends Component {
         </Wrapper>
       );
     }
+=======
+    return (
+      <MuiThemeProvider muiTheme={muiTheme}>
+        <Wrapper backgroundColor={this.state.backgroundColor}>
+          <Illustration />
+          <Title>Niveau sonore attendu : <Strong>{levelLabels[this.state.level]}</Strong></Title>
+          <Slider
+            min={0}
+            max={4}
+            value={this.state.level}
+            style={{width: '300px'}}
+            sliderStyle={{height: '5px'}}
+            onChange={(event, newValue) => this.setState({level: newValue})}
+            step={1}
+          />
+          <Button onClick={this.startFunction}>START</Button>
+        </Wrapper>
+      </MuiThemeProvider>
+    );
+>>>>>>> e27c1586baa50dca0e859d5ae840ae82f1e83bb1
   }
 }
 
