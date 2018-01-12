@@ -24,9 +24,13 @@ const muiTheme = getMuiTheme({
   slider: {
     selectionColor: '#FFFFFF',
     trackColor: 'rgba(255,255,255,0.3)',
+    trackColorSelected: 'rgba(255,255,255,0.3)',
     trackSize: 5,
-    handleSize: 16
-  }
+    handleSize: 16,
+  },
+  ripple: {
+    color: 'red',
+  },
 });
 
 const Title = styled.h3`
