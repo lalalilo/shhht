@@ -1,0 +1,37 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/node:8.9
+
+    working_directory: ~/shhht
+
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "package.json" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+
+      - run: npm install
+
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+
+      - run: npm run build
+
+      - deploy:
+          name: Deploy
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ] ; then
+              curl --silent --show-error --retry 5 https://bootstrap.pypa.io/get-pip.py | sudo python
+              sudo apt-get install python-dev
+              sudo pip install awscli
+              aws --region us-west-2 s3 sync build s3://shhht.lalilo.com --delete
+              aws configure set preview.cloudfront true
+              aws --region us-west-2 cloudfront create-invalidation --distribution-id E35FJJU7U847WJ --paths "/*"
+            fi
