@@ -28,9 +28,6 @@ const muiTheme = getMuiTheme({
     trackSize: 5,
     handleSize: 16,
   },
-  ripple: {
-    color: 'red',
-  },
 });
 
 const Title = styled.h3`
@@ -62,10 +59,10 @@ const levelLabels = {
 class App extends Component {
   state = {
     backgroundColor: "#3DCCC6",
-    isFinished: false
+    isFinished: false,
     level: 1,
     isStarted: false,
-    animationDuration: 600000
+    animationDuration: 60000
   }
 
   componentDidUpdate () {
@@ -75,14 +72,14 @@ class App extends Component {
   }
 
   componentDidMount () {
-
+    let animationRythm = this.state.animationDuration/60
   	this.animation = anime({
   	  targets: '#lineDrawing .lines path',
   	  strokeDashoffset: [anime.setDashoffset, 0],
   	  easing: 'easeInOutSine',
-  	  duration: this.state.animationDuration,
+      duration: animationRythm*2,
     	  autoplay: false,
-  	  delay: function(el, i) { return i * 500 },
+  	  delay: function(el, i) { return i * animationRythm },
   	  complete: function(anim) {
         setTimeout(function(){ whenFinished(); }, 3000);
   	  },
@@ -117,7 +114,9 @@ class App extends Component {
         return this.animation.pause()
       }
       else if(this.state.isStarted){
-      	this.animation.play()
+        this.animation.play()
+        console.log(this.state.animationDuration);
+
       }
     })
   }
