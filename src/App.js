@@ -10,6 +10,7 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: center;
   background-color : ${props => props.backgroundColor};
+  transition: background-color 1000ms linear;
 `
 // #3DCCC6 #82B2FF #8F94FB #F772B4 #F76767
 const colorLevel = {
@@ -48,9 +49,10 @@ class App extends Component {
       duration: 1500,
       delay: function(el, i) { return i * 500 },
     });
-    
+
     socket.on('level', (level) => {
       const color = colorLevel[Math.round(level)]
+
       this.setState({backgroundColor: color})
       if (level > 1.5) {
         return animation.pause()
