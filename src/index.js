@@ -34,13 +34,12 @@ const animation = anime({
   targets: '#lineDrawing .lines path',
   strokeDashoffset: [anime.setDashoffset, 0],
   easing: 'easeInOutSine',
-  duration: 10000,
-  delay: function(el, i) { return i * 250 },
-  direction: 'alternate'
+  duration: 1500,
+  delay: function(el, i) { return i * 500 },
 });
 
 socket.on('level', (level) => {
-  if (level > 2.5) {
+  if (level > 1.5) {
     return animation.pause()
   }
   animation.play()
