@@ -62,27 +62,36 @@ const levelLabels = {
 class App extends Component {
   state = {
     backgroundColor: "#3DCCC6",
+    isFinished: false
     level: 1,
     isStarted: false,
     animationDuration: 600000
   }
 
   componentDidUpdate () {
-  	console.log("jgjhjgkjgh")
   	if(this.state.isStarted === true){
       this.animation.play()
     }
   }
 
   componentDidMount () {
-	this.animation = anime({
-	  targets: '#lineDrawing .lines path',
-	  strokeDashoffset: [anime.setDashoffset, 0],
-	  easing: 'easeInOutSine',
-	  duration: this.state.animationDuration,
-  	  autoplay: false,
-	  delay: function(el, i) { return i * 500 },
-	});
+
+  	this.animation = anime({
+  	  targets: '#lineDrawing .lines path',
+  	  strokeDashoffset: [anime.setDashoffset, 0],
+  	  easing: 'easeInOutSine',
+  	  duration: this.state.animationDuration,
+    	  autoplay: false,
+  	  delay: function(el, i) { return i * 500 },
+  	  complete: function(anim) {
+        setTimeout(function(){ whenFinished(); }, 3000);
+  	  },
+  	});
+
+    const whenFinished = () => {
+      console.log("anim.completed");
+      this.setState({isFinished: true})
+    }
 
     const socket = io(process.env.NODE_ENV === 'production' ? 'https://speech.lalilo.com/shhht' : 'http://localhost:5000/shhht')
     navigator.mediaDevices.getUserMedia({
@@ -114,38 +123,53 @@ class App extends Component {
   }
 
   startFunction = () => {
-      this.setState({isStarted: true})
-    }
+    this.setState({isStarted: true})
+  }
+
+
+  restartFunction = () => {
+     console.log("yep, cette fonction est à faire")
+  }
 
   render() {
-    return (
-      <MuiThemeProvider muiTheme={muiTheme}>
+    if(this.state.isFinished){
+      return (
         <Wrapper backgroundColor={this.state.backgroundColor}>
-          <Illustration />
-          <Title> Durée de la séance : <Strong>{this.state.animationDuration/(60*1000)} min</Strong></Title>
-          <Slider
-            min={1000*60}
-            max={1000*6000*2}
-            value={this.state.animationDuration}
-            style={{width: '300px'}}
-            sliderStyle={{height: '5px'}}
-            onChange={(event, newValue) => this.setState({animationDuration: newValue})}
-            step={60000}
-          />
-          <Title>Niveau sonore attendu : <Strong>{levelLabels[this.state.level]}</Strong></Title>
-          <Slider
-            min={0}
-            max={4}
-            value={this.state.level}
-            style={{width: '300px'}}
-            sliderStyle={{height: '5px'}}
-            onChange={(event, newValue) => this.setState({level: newValue})}
-            step={1}
-          />
-          <Button onClick={this.startFunction}>START</Button>
+          BRAVO
+          <Button onClick={this.restartFunction}>RESTART</Button>
         </Wrapper>
-      </MuiThemeProvider>
-    );
+      );
+    }
+    else{
+      return (
+        <MuiThemeProvider muiTheme={muiTheme}>
+          <Wrapper backgroundColor={this.state.backgroundColor}>
+            <Illustration />
+            <Title> Durée de la séance : <Strong>{this.state.animationDuration/(60*1000)} min</Strong></Title>
+            <Slider
+              min={1000*60}
+              max={1000*6000*2}
+              value={this.state.animationDuration}
+              style={{width: '300px'}}
+              sliderStyle={{height: '5px'}}
+              onChange={(event, newValue) => this.setState({animationDuration: newValue})}
+              step={60000}
+            />
+            <Title>Niveau sonore attendu : <Strong>{levelLabels[this.state.level]}</Strong></Title>
+            <Slider
+              min={0}
+              max={4}
+              value={this.state.level}
+              style={{width: '300px'}}
+              sliderStyle={{height: '5px'}}
+              onChange={(event, newValue) => this.setState({level: newValue})}
+              step={1}
+            />
+            <Button onClick={this.startFunction}>START</Button>
+          </Wrapper>
+        </MuiThemeProvider>
+      );
+    }
   }
 }
 
