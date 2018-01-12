@@ -4,7 +4,7 @@ import App from './App';
 import io from 'socket.io-client';
 import anime from 'animejs';
 
-const socket = io('https://speech.staging.lalilo.com/shhht')
+const socket = io(process.env.NODE_ENV === 'production' ? 'https://speech.lalilo.com/shhht' : 'http://localhost:5000')
 
 export const record = () => {
   return navigator.mediaDevices.getUserMedia({
