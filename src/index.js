@@ -36,6 +36,7 @@ anime({
   targets: '#lineDrawing .lines path',
   strokeDashoffset: [anime.setDashoffset, 0],
   easing: 'easeInOutSine',
+  // autoplay: false,
   duration: 15000,
   delay: function(el, i) { return i * 2500 },
   direction: 'alternate',
