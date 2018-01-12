@@ -17,7 +17,7 @@ flex-direction: column;
 align-items: center;
 justify-content: center;
 background-color : ${props => props.backgroundColor};
-transition: background-color 1000ms linear;
+transition: background-color 500ms linear;
 padding-bottom: 20px;
 `
 const muiTheme = getMuiTheme({
