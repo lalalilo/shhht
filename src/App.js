@@ -31,25 +31,33 @@ const colorLevel = {
 class App extends Component {
   state = {
     backgroundColor: "#3DCCC6",
-    isStarted: false
+    isStarted: false,
+    isFinished: false
   }
 
   componentDidUpdate () {
-  	console.log("jgjhjgkjgh")
   	if(this.state.isStarted === true){
       this.animation.play()
     }
   }
 
   componentDidMount () {
-	this.animation = anime({
-	  targets: '#lineDrawing .lines path',
-	  strokeDashoffset: [anime.setDashoffset, 0],
-	  easing: 'easeInOutSine',
-	  duration: 1500,
-  	  autoplay: false,
-	  delay: function(el, i) { return i * 500 },
-	});
+  	this.animation = anime({
+  	  targets: '#lineDrawing .lines path',
+  	  strokeDashoffset: [anime.setDashoffset, 0],
+  	  easing: 'easeInOutSine',
+  	  duration: 1500,
+    	  autoplay: false,
+  	  delay: function(el, i) { return i * 50 },
+  	  complete: function(anim) {
+        setTimeout(function(){ whenFinished(); }, 3000);
+  	  },
+  	});
+
+    const whenFinished = () => {
+      console.log("anim.completed");
+      this.setState({isFinished: true})
+    }
 
     const socket = io(process.env.NODE_ENV === 'production' ? 'https://speech.lalilo.com/shhht' : 'http://localhost:5000/shhht')
     console.log(socket)
@@ -75,23 +83,38 @@ class App extends Component {
       if (level > 1.5) {
         return this.animation.pause()
       }
-      else if(this.state.isStarted === true){
+      else if(this.state.isStarted){
       	this.animation.play()
       }
     })
   }
 
   startFunction = () => {
-      this.setState({isStarted: true})
-    }
+    this.setState({isStarted: true})
+  }
+
+
+  restartFunction = () => {
+     console.log("yep, cette fonction est à faire")
+  }
 
   render() {
-    return (
-      <Wrapper backgroundColor={this.state.backgroundColor}>
-      	<Illustration />
-	  	<Button onClick={this.startFunction}>START</Button>
-      </Wrapper>
-    );
+    if(this.state.isFinished){
+      return (
+        <Wrapper backgroundColor={this.state.backgroundColor}>
+          BRAVO
+          <Button onClick={this.restartFunction}>RESTART</Button>
+        </Wrapper>
+      );
+    }
+    else{
+      return (
+        <Wrapper backgroundColor={this.state.backgroundColor}>
+          <Illustration />
+          <Button onClick={this.startFunction}>START</Button>
+        </Wrapper>
+      );
+    }
   }
 }
 
