@@ -3,6 +3,9 @@ import Illustration from './illustration';
 import styled from 'styled-components';
 import io from 'socket.io-client';
 import anime from 'animejs';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import Slider from 'material-ui/Slider';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -17,8 +20,15 @@ const Wrapper = styled.div`
 const Button = styled.button`
 	margin-top: 20px
 `
+const muiTheme = getMuiTheme({
+  slider: {
+    selectionColor: '#FFFFFF',
+    trackColor: 'rgba(255,255,255,0.3)',
+    trackSize: 5,
+    handleSize: 16
+  }
+});
 
-// #3DCCC6 #82B2FF #8F94FB #F772B4 #F76767
 const colorLevel = {
   0: "#3DCCC6",
   1: "#82B2FF",
@@ -29,7 +39,8 @@ const colorLevel = {
 
 class App extends Component {
   state = {
-    backgroundColor: "#3DCCC6"
+    backgroundColor: "#3DCCC6",
+    level: 1.5
   }
   componentDidMount () {
     const socket = io(process.env.NODE_ENV === 'production' ? 'https://speech.lalilo.com/shhht' : 'http://localhost:5000/shhht')
@@ -61,7 +72,7 @@ class App extends Component {
       const color = colorLevel[Math.round(level)]
 
       this.setState({backgroundColor: color})
-      if (level > 1.5) {
+      if (level > this.state.level) {
         return animation.pause()
       }
       animation.play()
@@ -74,10 +85,20 @@ class App extends Component {
 
   render() {
     return (
-      <Wrapper backgroundColor={this.state.backgroundColor}>
-      	<Illustration />
-	  	<Button onClick={this.startFunction}>START</Button>
-      </Wrapper>
+      <MuiThemeProvider muiTheme={muiTheme}>
+        <Wrapper backgroundColor={this.state.backgroundColor}>
+          <Illustration />
+          <Slider
+            min={0}
+            max={4}
+            value={this.state.level}
+            style={{width: '300px'}}
+            sliderStyle={{height: '5px'}}
+            onChange={(event, newValue) => this.setState({level: newValue})}
+          />
+          <Button onClick={this.startFunction}>START</Button>
+        </Wrapper>
+      </MuiThemeProvider>
     );
   }
 }
