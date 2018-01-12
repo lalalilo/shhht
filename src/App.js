@@ -12,6 +12,7 @@ const Wrapper = styled.div`
   align-items: center;
   justify-content: center;
   background-color : ${props => props.backgroundColor};
+  transition: background-color 1000ms linear;
 `
 const Button = styled.button`
 	margin-top: 20px
@@ -62,6 +63,7 @@ class App extends Component {
 
     socket.on('level', (level) => {
       const color = colorLevel[Math.round(level)]
+
       this.setState({backgroundColor: color})
       if (level > 1.5) {
         return animation.pause()
