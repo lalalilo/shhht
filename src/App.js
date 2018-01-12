@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Illustration from './illustration';
+import Logo from './logo';
 import styled from 'styled-components';
 import io from 'socket.io-client';
 import anime from 'animejs';
@@ -133,15 +134,19 @@ class App extends Component {
   render() {
     if(this.state.isFinished){
       return (
-        <Wrapper backgroundColor={this.state.backgroundColor}>
-          BRAVO
-          <Button onClick={this.restartFunction}>RESTART</Button>
-        </Wrapper>
+        <MuiThemeProvider muiTheme={muiTheme}>
+          <Logo />
+          <Wrapper backgroundColor={this.state.backgroundColor}>
+            BRAVO
+            <Button onClick={this.restartFunction}>RESTART</Button>
+          </Wrapper>
+        </MuiThemeProvider>
       );
     }
     else{
       return (
         <MuiThemeProvider muiTheme={muiTheme}>
+          <Logo />
           <Wrapper backgroundColor={this.state.backgroundColor}>
             <Illustration />
             <Title> Durée de la séance : <Strong>{this.state.animationDuration/(60*1000)} min</Strong></Title>
