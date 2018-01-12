@@ -3,7 +3,6 @@ import styled from 'styled-components';
 
 const LogoPlacemenet = styled.div`
     width: 70px;
-    background-color: #3DCCC6;
     position: absolute;
     margin-top: 30px;
     margin-left: 30px;
