@@ -6,14 +6,26 @@ import anime from 'animejs';
 
 const Wrapper = styled.div`
   width: 100%;
+  height: 100vh;
   display: flex;
   justify-content: center;
+  background-color : ${props => props.backgroundColor};
 `
-
+// #3DCCC6 #82B2FF #8F94FB #F772B4 #F76767
+const colorLevel = {
+  0: "#3DCCC6",
+  1: "#82B2FF",
+  2: "#8F94FB",
+  3: "#F772B4",
+  4: "#F76767",
+}
 class App extends Component {
+  state = {
+    backgroundColor: "#3DCCC6"
+  }
   componentDidMount () {
-    const socket = io(process.env.NODE_ENV === 'production' ? 'https://speech.lalilo.com/shhht' : 'http://localhost:5000')
-
+    const socket = io(process.env.NODE_ENV === 'production' ? 'https://speech.lalilo.com/shhht' : 'http://localhost:5000/shhht')
+    console.log(socket)
     navigator.mediaDevices.getUserMedia({
       audio: {
         sampleSize: 16,
@@ -38,6 +50,8 @@ class App extends Component {
     });
     
     socket.on('level', (level) => {
+      const color = colorLevel[Math.round(level)]
+      this.setState({backgroundColor: color})
       if (level > 1.5) {
         return animation.pause()
       }
@@ -46,7 +60,7 @@ class App extends Component {
   }
   render() {
     return (
-      <Wrapper>
+      <Wrapper backgroundColor={this.state.backgroundColor}>
       	<Illustration />
       </Wrapper>
     );
