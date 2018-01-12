@@ -63,7 +63,8 @@ class App extends Component {
   state = {
     backgroundColor: "#3DCCC6",
     level: 1,
-    isStarted: false
+    isStarted: false,
+    animationDuration: 600000
   }
 
   componentDidUpdate () {
@@ -78,7 +79,7 @@ class App extends Component {
 	  targets: '#lineDrawing .lines path',
 	  strokeDashoffset: [anime.setDashoffset, 0],
 	  easing: 'easeInOutSine',
-	  duration: 1500,
+	  duration: this.state.animationDuration,
   	  autoplay: false,
 	  delay: function(el, i) { return i * 500 },
 	});
@@ -121,6 +122,16 @@ class App extends Component {
       <MuiThemeProvider muiTheme={muiTheme}>
         <Wrapper backgroundColor={this.state.backgroundColor}>
           <Illustration />
+          <Title> Durée de la séance : <Strong>{this.state.animationDuration/(60*1000)} min</Strong></Title>
+          <Slider
+            min={1000*60}
+            max={1000*6000*2}
+            value={this.state.animationDuration}
+            style={{width: '300px'}}
+            sliderStyle={{height: '5px'}}
+            onChange={(event, newValue) => this.setState({animationDuration: newValue})}
+            step={60000}
+          />
           <Title>Niveau sonore attendu : <Strong>{levelLabels[this.state.level]}</Strong></Title>
           <Slider
             min={0}
