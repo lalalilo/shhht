@@ -7,7 +7,13 @@ import anime from 'animejs';
 const Wrapper = styled.div`
   width: 100%;
   display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
+`
+
+const Button = styled.button`
+	margin-top: 20px
 `
 
 class App extends Component {
@@ -44,10 +50,16 @@ class App extends Component {
       animation.play()
     })
   }
+
+  startFunction = () => {
+    	console.log("youpi");
+    }
+
   render() {
     return (
       <Wrapper>
       	<Illustration />
+	  	<Button onClick={this.startFunction}>START</Button>
       </Wrapper>
     );
   }
