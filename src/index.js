@@ -1,9 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
 import App from './App';
-import registerServiceWorker from './registerServiceWorker';
+import io from 'socket.io-client';
 import anime from 'animejs';
+
+const socket = io('https://speech.staging.lalilo.com/shhht')
 
 export const record = () => {
   return navigator.mediaDevices.getUserMedia({
@@ -15,21 +16,23 @@ export const record = () => {
   })
   .then(stream => {
     const mediaRecorder = new MediaRecorder(stream)
-    mediaRecorder.start(100)
+    mediaRecorder.start(250)
     mediaRecorder.ondataavailable = (event) => {
-      console.log('coucou')
+      socket.emit('message', new Blob([event.data], { 'type' : 'audio/ogg; codecs=opus' }))
     }
   })
 }
 
 record()
 
+socket.on('level', (level) => {
+  console.log(level)
+})
+
+
 ReactDOM.render(<App />, document.getElementById('root'));
-registerServiceWorker();
 
-
-
-var lineDrawing = anime({
+anime({
   targets: '#lineDrawing .lines path',
   strokeDashoffset: [anime.setDashoffset, 0],
   easing: 'easeInOutSine',
