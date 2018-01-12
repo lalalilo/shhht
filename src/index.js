@@ -25,19 +25,23 @@ export const record = () => {
 
 record()
 
-socket.on('level', (level) => {
-  console.log(level)
-})
+
 
 
 ReactDOM.render(<App />, document.getElementById('root'));
 
-anime({
+const animation = anime({
   targets: '#lineDrawing .lines path',
   strokeDashoffset: [anime.setDashoffset, 0],
   easing: 'easeInOutSine',
-  duration: 15000,
-  delay: function(el, i) { return i * 2500 },
-  direction: 'alternate',
-  loop: true
+  duration: 10000,
+  delay: function(el, i) { return i * 250 },
+  direction: 'alternate'
 });
+
+socket.on('level', (level) => {
+  if (level > 2.5) {
+    return animation.pause()
+  }
+  animation.play()
+})
