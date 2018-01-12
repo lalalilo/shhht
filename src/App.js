@@ -25,12 +25,24 @@ const colorLevel = {
   3: "#F772B4",
   4: "#F76767",
 }
+  
 
 class App extends Component {
   state = {
-    backgroundColor: "#3DCCC6"
+    backgroundColor: "#3DCCC6",
+    isStarted: false
   }
   componentDidMount () {
+
+	const animation = anime({
+	  targets: '#lineDrawing .lines path',
+	  strokeDashoffset: [anime.setDashoffset, 0],
+	  easing: 'easeInOutSine',
+	  duration: 1500,
+  	  autoplay: false,
+	  delay: function(el, i) { return i * 500 },
+	});
+
     const socket = io(process.env.NODE_ENV === 'production' ? 'https://speech.lalilo.com/shhht' : 'http://localhost:5000/shhht')
     console.log(socket)
     navigator.mediaDevices.getUserMedia({
@@ -48,26 +60,20 @@ class App extends Component {
       }
     })
 
-    const animation = anime({
-      targets: '#lineDrawing .lines path',
-      strokeDashoffset: [anime.setDashoffset, 0],
-      easing: 'easeInOutSine',
-      duration: 1500,
-      delay: function(el, i) { return i * 500 },
-    });
-    
     socket.on('level', (level) => {
       const color = colorLevel[Math.round(level)]
       this.setState({backgroundColor: color})
       if (level > 1.5) {
         return animation.pause()
       }
-      animation.play()
+      else if(this.state.isStarted === true){
+      	animation.play()
+      }
     })
   }
 
   startFunction = () => {
-    	console.log("youpi");
+      this.setState({isStarted: true})
     }
 
   render() {
