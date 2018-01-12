@@ -33,9 +33,16 @@ class App extends Component {
     backgroundColor: "#3DCCC6",
     isStarted: false
   }
-  componentDidMount () {
 
-	const animation = anime({
+  componentDidUpdate () {
+  	console.log("jgjhjgkjgh")
+  	if(this.state.isStarted === true){
+      this.animation.play()
+    }
+  }
+
+  componentDidMount () {
+	this.animation = anime({
 	  targets: '#lineDrawing .lines path',
 	  strokeDashoffset: [anime.setDashoffset, 0],
 	  easing: 'easeInOutSine',
@@ -66,10 +73,10 @@ class App extends Component {
 
       this.setState({backgroundColor: color})
       if (level > 1.5) {
-        return animation.pause()
+        return this.animation.pause()
       }
       else if(this.state.isStarted === true){
-      	animation.play()
+      	this.animation.play()
       }
     })
   }
