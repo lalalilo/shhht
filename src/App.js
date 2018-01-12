@@ -29,6 +29,15 @@ const muiTheme = getMuiTheme({
   }
 });
 
+const Title = styled.h3`
+color: white;
+font-size: 28px;
+`
+
+const Strong = styled.strong`
+font-size: 38px;
+`
+
 const colorLevel = {
   0: "#3DCCC6",
   1: "#82B2FF",
@@ -36,12 +45,20 @@ const colorLevel = {
   3: "#F772B4",
   4: "#F76767",
 }
+
+const levelLabels = {
+  0: "très calme",
+  1: "calme",
+  2: "détendu",
+  3: "convivial",
+  4: "dynamique",
+}
   
 
 class App extends Component {
   state = {
     backgroundColor: "#3DCCC6",
-    level: 1.5,
+    level: 1,
     isStarted: false
   }
 
@@ -63,7 +80,6 @@ class App extends Component {
 	});
 
     const socket = io(process.env.NODE_ENV === 'production' ? 'https://speech.lalilo.com/shhht' : 'http://localhost:5000/shhht')
-    console.log(socket)
     navigator.mediaDevices.getUserMedia({
       audio: {
         sampleSize: 16,
@@ -101,6 +117,7 @@ class App extends Component {
       <MuiThemeProvider muiTheme={muiTheme}>
         <Wrapper backgroundColor={this.state.backgroundColor}>
           <Illustration />
+          <Title>Niveau sonore attendu : <Strong>{levelLabels[this.state.level]}</Strong></Title>
           <Slider
             min={0}
             max={4}
@@ -108,6 +125,7 @@ class App extends Component {
             style={{width: '300px'}}
             sliderStyle={{height: '5px'}}
             onChange={(event, newValue) => this.setState({level: newValue})}
+            step={1}
           />
           <Button onClick={this.startFunction}>START</Button>
         </Wrapper>
