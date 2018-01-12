@@ -4,7 +4,7 @@ jobs:
     docker:
       - image: circleci/node:8.9
 
-    working_directory: ~/teach-app
+    working_directory: ~/shhht
 
     steps:
       - checkout
@@ -22,43 +22,13 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
 
-      - run: |
-          if [ "${CIRCLE_BRANCH}" == "staging" ]; then
-            node scripts/techdebt.js
-            npm run build:staging
-          else
-            npm run build
-          fi
-      - run: npm test -- --coverage
+      - run: npm run build
 
       - deploy:
-          name: Deploy to S3 if tests pass and branch is Master
+          name: Deploy
           command: |
-            if [ "${CIRCLE_BRANCH}" != "staging" ] && [ "${CIRCLE_BRANCH}" != "master" ] ; then
-              echo "not in staging or master"
-              exit
+            if [ "${CIRCLE_BRANCH}" == "master" ] ; then
+              aws --region us-west-2 s3 sync build s3://shhht.lalilo.com --delete
+              aws configure set preview.cloudfront true
+              aws --region us-west-2 cloudfront create-invalidation --distribution-id E35FJJU7U847WJ --paths "/*"
             fi
-            if [ "${CIRCLE_BRANCH}" == "staging" ]; then
-              export S3_BUCKET=s3://staging.teach.lalilo.co
-              export CLOUD_FRONT_DISTRIBUTION=EYJEL1ADQT7BF
-
-            elif [ "${CIRCLE_BRANCH}" == "master" ]; then
-              export SENTRY_AUTH_TOKEN=78655f789cfc4be5b28e7258175e5a14a24a939b077c48088a248bf7597f700b
-              export S3_BUCKET=s3://teach.lalilo.co
-              export CLOUD_FRONT_DISTRIBUTION=E2PKEX2YC9F63N
-            fi
-
-            curl --silent --show-error --retry 5 https://bootstrap.pypa.io/get-pip.py | sudo python
-            sudo apt-get install python-dev
-            sudo pip install awscli
-
-            if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              curl -sL https://sentry.io/get-cli/ | bash
-              sentry-cli releases -o lalilo -p teach-app new $(git rev-parse HEAD)
-              sentry-cli releases -o lalilo -p teach-app files $(git rev-parse HEAD) upload-sourcemaps build
-              aws --region us-west-2 s3 sync coverage s3://coverage.lalilo.co/teach-app --delete
-            fi
-
-            aws --region us-west-2 s3 sync build $S3_BUCKET --delete --exclude *.map
-            aws configure set preview.cloudfront true
-            aws --region us-west-2 cloudfront create-invalidation --distribution-id $CLOUD_FRONT_DISTRIBUTION --paths "/*"
