@@ -36,11 +36,10 @@ const animation = anime({
   easing: 'easeInOutSine',
   duration: 1500,
   delay: function(el, i) { return i * 500 },
-  direction: 'alternate'
 });
 
 socket.on('level', (level) => {
-  if (level > 2.5) {
+  if (level > 1.5) {
     return animation.pause()
   }
   animation.play()
