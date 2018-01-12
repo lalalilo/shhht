@@ -1,8 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
 import App from './App';
-import registerServiceWorker from './registerServiceWorker';
 import io from 'socket.io-client';
 import anime from 'animejs';
 
@@ -27,12 +25,14 @@ export const record = () => {
 
 record()
 
+socket.on('level', (level) => {
+  console.log(level)
+})
+
+
 ReactDOM.render(<App />, document.getElementById('root'));
-registerServiceWorker();
 
-
-
-var lineDrawing = anime({
+anime({
   targets: '#lineDrawing .lines path',
   strokeDashoffset: [anime.setDashoffset, 0],
   easing: 'easeInOutSine',
