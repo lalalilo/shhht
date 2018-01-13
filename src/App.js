@@ -6,6 +6,7 @@ import SetupPage from './SetupPage';
 import IllustrationPage from './IllustrationPage';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import { colors } from './levels'
 
 const Wrapper = styled.div`
 width: 100%;
@@ -21,19 +22,11 @@ const muiTheme = getMuiTheme({
   },
 });
 
-const colorLevel = {
-  0: "#3DCCC6",
-  1: "#82B2FF",
-  2: "#8F94FB",
-  3: "#F772B4",
-  4: "#F76767",
-}
-
 const socket = io(process.env.NODE_ENV === 'production' ? 'https://speech.lalilo.com/shhht' : 'http://localhost:5000/shhht')
 
 class App extends React.Component {
   state = {
-    color: colorLevel[0],
+    color: colors[0],
     level: 1,
     isStarted: false,
     isPlaying: false,
@@ -60,7 +53,7 @@ class App extends React.Component {
 
     socket.on('level', (level) => {
       console.log('level', level)
-      const color = colorLevel[Math.round(level)] || colorLevel[0]
+      const color = colors[Math.round(level)] || colors[0]
 
       this.setState({
         color: color,
@@ -78,7 +71,7 @@ class App extends React.Component {
     this.setState({
       isStarted: false,
       isPlaying: false,
-      color: colorLevel[0]
+      color: colors[0]
     })
   }
 

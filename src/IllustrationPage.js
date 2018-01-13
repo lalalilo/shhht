@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Illustration from './illustration';
 import styled from 'styled-components';
 import anime from 'animejs';
-import levelLabels from './levels';
+import { labels } from './levels';
 import Button from './Button';
 
 const Wrapper = styled.div`
@@ -22,10 +22,13 @@ display: flex;
 `
 
 class IllustrationPage extends Component {
+  state = {
+    isFinished: false
+  }
   componentDidMount () {
     window.ga('set', 'page', '/illustration')
     window.ga('set', 'metric1', this.props.duration)
-    window.ga('set', 'dimension1', levelLabels[this.props.level])
+    window.ga('set', 'dimension1', labels[this.props.level])
     window.ga('send', 'pageview')
 
     const animationRythm = this.props.duration / 60

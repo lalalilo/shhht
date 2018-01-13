@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import Slider from 'material-ui/Slider';
 import Button from './Button';
-import levelLabels from './levels';
+import { labels, colors } from './levels';
 import headerImage from './images/start.png'
 
 const Wrapper = styled.div`
@@ -12,7 +12,8 @@ display: flex;
 flex-direction: column;
 align-items: center;
 justify-content: space-around;
-background-color: #82b2ff;
+background-color : ${props => props.backgroundColor};
+transition: background-color 500ms linear;
 `
 
 const Content = styled.div`
@@ -52,7 +53,7 @@ export default class extends React.Component {
   render () {
     const { duration, level, onDurationChange, onLevelChange, onSubmit } = this.props
     return (
-      <Wrapper>
+      <Wrapper backgroundColor={colors[level]}>
         <Content>
           <Header src={headerImage} alt='' />
           <Slogan>Le silence fera apparaître une suprise...</Slogan>
@@ -68,7 +69,7 @@ export default class extends React.Component {
             onChange={(event, newValue) => onDurationChange(newValue)}
             step={60000}
           />
-          <Title>Niveau sonore attendu : <Strong>{levelLabels[level]}</Strong></Title>
+          <Title>Niveau sonore attendu : <Strong>{labels[level]}</Strong></Title>
           <Slider
             min={0}
             max={4}
