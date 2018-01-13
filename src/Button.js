@@ -9,12 +9,13 @@ export default (props) => (
     borderRadius: '30px',
     minWidth: '130px',
     boxShadow: 'none',
-    margin: '40px'
+    margin: '40px 20px'
   }}
   buttonStyle={{
     borderRadius: '30px',
     color: '#82b2ff',
     fontWeight: 'bold',
+    letterSpacing: '1px',
     textTransform: 'uppercase'
   }}
   overlayStyle={{

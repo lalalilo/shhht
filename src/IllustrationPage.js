@@ -19,6 +19,9 @@ padding-bottom: 20px;
 
 const Actions = styled.div`
 display: flex;
+@media print {
+  display: none;
+}
 `
 
 class IllustrationPage extends Component {
