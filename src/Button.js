@@ -15,16 +15,13 @@ export default (props) => (
     borderRadius: '30px',
     color: '#82b2ff',
     fontWeight: 'bold',
+    textTransform: 'uppercase'
   }}
   overlayStyle={{
     height: 60,
     padding: '0 25px',
     borderRadius: '30px',
     minWidth: '130px'
-  }}
-  labelStyle={{
-    fontSize: '16px',
-    color: '#82b2ff'
   }}
   {...props}
 />
