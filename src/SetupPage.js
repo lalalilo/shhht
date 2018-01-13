@@ -2,7 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import Slider from 'material-ui/Slider';
 import Button from './Button';
-import levelLabels from './levels'
+import levelLabels from './levels';
+import headerImage from './images/start.png'
 
 const Wrapper = styled.div`
 width: 100%;
@@ -22,6 +23,10 @@ const Strong = styled.strong`
 font-size: 38px;
 `
 
+const Header = styled.img`
+width: 110px;
+`
+
 export default class extends React.Component {
   componentDidMount () {
     window.ga('set', 'page', '/setup')
@@ -31,6 +36,7 @@ export default class extends React.Component {
     const { duration, level, onDurationChange, onLevelChange, onSubmit } = this.props
     return (
       <Wrapper>
+        <Header src={headerImage} alt='' />
         <Title> Durée de la séance : <Strong>{duration/(60*1000)} min</Strong></Title>
         <Slider
           min={1000 * 60}
