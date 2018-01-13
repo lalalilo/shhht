@@ -70,16 +70,20 @@ class App extends React.Component {
     })
   }
 
+  reset = () => {
+    this.setState({
+      isFinished: false,
+      isStarted: false,
+      isPlaying: false,
+      color: colorLevel[0]
+    })
+  }
+
   getPage = () => {
     if (this.state.isFinished) {
       return (
         <EndPage
-          reset={() => this.setState({
-            isFinished: false,
-            isStarted: false,
-            isPlaying: false,
-            color: colorLevel[0]
-          })}
+          reset={this.reset}
         />
       )
     }
@@ -109,7 +113,7 @@ class App extends React.Component {
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
         <Wrapper>
-          <Logo />
+          <Logo onClick={this.reset} />
           {this.getPage()}
         </Wrapper>
       </MuiThemeProvider>
