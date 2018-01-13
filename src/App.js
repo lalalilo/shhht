@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import io from 'socket.io-client';
 import SetupPage from './SetupPage';
 import IllustrationPage from './IllustrationPage';
-import EndPage from './EndPage';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
@@ -35,7 +34,6 @@ const socket = io(process.env.NODE_ENV === 'production' ? 'https://speech.lalilo
 class App extends React.Component {
   state = {
     color: colorLevel[0],
-    isFinished: false,
     level: 1,
     isStarted: false,
     isPlaying: false,
@@ -53,6 +51,7 @@ class App extends React.Component {
     })
     .then(stream => {
       const mediaRecorder = new MediaRecorder(stream)
+      this.stream = stream
       mediaRecorder.start(250)
       mediaRecorder.ondataavailable = (event) => {
         socket.emit('message', new Blob([event.data], { 'type' : 'audio/ogg; codecs=opus' }))
@@ -70,23 +69,24 @@ class App extends React.Component {
     })
   }
 
+  end = () => {
+    this.stream.getTracks()[0].stop()
+  }
+
   reset = () => {
+    this.stream.getTracks()[0].stop()
     this.setState({
-      isFinished: false,
       isStarted: false,
       isPlaying: false,
       color: colorLevel[0]
     })
   }
 
+  print = () => {
+    window.setTimeout(window.print, 2)
+  }
+
   getPage = () => {
-    if (this.state.isFinished) {
-      return (
-        <EndPage
-          reset={this.reset}
-        />
-      )
-    }
     if (!this.state.isStarted) {
       return (
         <SetupPage
@@ -100,11 +100,13 @@ class App extends React.Component {
     }
     return (
       <IllustrationPage
-        onEnd={() => this.setState({isFinished: true})}
         duration={this.state.duration}
         color={this.state.color}
         level={this.state.level}
         play={this.state.isStarted && this.state.isPlaying}
+        reset={this.reset}
+        print={this.print}
+        onEnd={this.end}
       />
     )
   }

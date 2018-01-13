@@ -51,10 +51,10 @@ export default class extends React.Component {
         <Slider
           min={0}
           max={4}
-          value={level}
+          value={this.props.level}
           style={{width: '300px'}}
           sliderStyle={{height: '5px'}}
-          onChange={(event, newValue) => onLevelChange(level)}
+          onChange={(event, newValue) => onLevelChange(newValue)}
           step={1}
         />
         <Button onClick={onSubmit}>C'est parti !</Button>

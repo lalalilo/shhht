@@ -3,6 +3,7 @@ import Illustration from './illustration';
 import styled from 'styled-components';
 import anime from 'animejs';
 import levelLabels from './levels';
+import Button from './Button';
 
 const Wrapper = styled.div`
 width: 100%;
@@ -14,6 +15,10 @@ justify-content: center;
 background-color : ${props => props.backgroundColor};
 transition: background-color 500ms linear;
 padding-bottom: 20px;
+`
+
+const Actions = styled.div`
+display: flex;
 `
 
 class IllustrationPage extends Component {
@@ -31,7 +36,10 @@ class IllustrationPage extends Component {
       duration: animationRythm * 2,
       autoplay: false,
   	  delay: (el, i) => i * animationRythm,
-  	  complete: (animation) => window.setTimeout(this.props.onEnd, 3000),
+  	  complete: (animation) => {
+        this.setState({isFinished: true})
+        this.props.onEnd()
+      },
   	})
   }
 
@@ -41,9 +49,14 @@ class IllustrationPage extends Component {
   }
 
   render() {
+    const { color, print, reset } = this.props
     return (
-      <Wrapper backgroundColor={this.props.color}>
+      <Wrapper backgroundColor={this.state.isFinished ? '#82b2ff' : color}>
         <Illustration />
+        <Actions>
+          { this.state.isFinished && <Button onClick={reset}>Recommencer</Button> }
+          { this.state.isFinished && <Button onClick={print}>Imprimer</Button> }
+        </Actions>
       </Wrapper>
     )
   }

@@ -8,7 +8,8 @@ export default (props) => (
     lineHeight: '60px',
     borderRadius: '30px',
     minWidth: '130px',
-    boxShadow: 'none'
+    boxShadow: 'none',
+    margin: '40px'
   }}
   buttonStyle={{
     borderRadius: '30px',
@@ -17,11 +18,11 @@ export default (props) => (
   }}
   overlayStyle={{
     height: 60,
+    padding: '0 25px',
     borderRadius: '30px',
     minWidth: '130px'
   }}
   labelStyle={{
-    padding: '0 25px',
     fontSize: '16px',
     color: '#82b2ff'
   }}
