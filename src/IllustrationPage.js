@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Illustration from './illustration';
 import styled from 'styled-components';
 import anime from 'animejs';
+import levelLabels from './levels';
 
 const Wrapper = styled.div`
 width: 100%;
@@ -17,6 +18,11 @@ padding-bottom: 20px;
 
 class IllustrationPage extends Component {
   componentDidMount () {
+    window.ga('set', 'page', '/illustration')
+    window.ga('set', 'metric1', this.props.duration)
+    window.ga('set', 'dimension1', levelLabels[this.props.level])
+    window.ga('send', 'pageview')
+
     const animationRythm = this.props.duration / 60
   	this.animation = anime({
   	  targets: '#lineDrawing .lines path',
@@ -29,8 +35,9 @@ class IllustrationPage extends Component {
   	})
   }
 
-  componentWillReceiveProps (nextProps) {
-    nextProps.play ? this.animation.play() : this.animation.pause()
+  componentWillReceiveProps (nextProps, props) {
+    nextProps.play && !props.play && this.animation.play()
+    !nextProps.play && props.play && this.animation.pause()
   }
 
   render() {

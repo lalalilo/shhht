@@ -16,9 +16,18 @@ color: white;
 font-size: 28px;
 `
 
-export default ({ reset }) => (
-  <Wrapper>
-    <Title>BRAVO</Title>
-    <Button onClick={reset}>Recommencer</Button>
-  </Wrapper>
-)
+export default class extends React.Component {
+  componentDidMount () {
+    window.ga('set', 'page', '/end')
+    window.ga('send', 'pageview')
+  }
+  render () {
+    const { reset } = this.props
+    return (
+      <Wrapper>
+        <Title>BRAVO</Title>
+        <Button onClick={reset}>Recommencer</Button>
+      </Wrapper>
+    )
+  }
+}

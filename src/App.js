@@ -99,6 +99,7 @@ class App extends React.Component {
         onEnd={() => this.setState({isFinished: true})}
         duration={this.state.duration}
         color={this.state.color}
+        level={this.state.level}
         play={this.state.isStarted && this.state.isPlaying}
       />
     )
