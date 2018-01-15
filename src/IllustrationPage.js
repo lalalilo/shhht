@@ -50,8 +50,8 @@ class IllustrationPage extends Component {
   }
 
   componentWillReceiveProps (nextProps, props) {
-    nextProps.play && !props.play && this.animation.play()
-    !nextProps.play && props.play && this.animation.pause()
+    if(nextProps.play) return this.animation.play()
+    this.animation.pause()
   }
 
   render() {
