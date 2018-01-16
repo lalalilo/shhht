@@ -56,7 +56,7 @@ export default class extends React.Component {
       <Wrapper backgroundColor={colors[level]}>
         <Content>
           <Header src={headerImage} alt='' />
-          <Slogan>Le silence fera apparaître une suprise...</Slogan>
+          <Slogan>Le silence fera apparaître une surprise...</Slogan>
         </Content>
         <Content>
           <Title> Durée de la séance : <Strong>{duration/(60*1000)} min</Strong></Title>
