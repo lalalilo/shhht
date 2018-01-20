@@ -45,7 +45,7 @@ class App extends React.Component {
       this.context = context
       const analyser = context.createAnalyser()
       analyser.smoothingTimeConstant = 0.3
-      analyser.fftSize = 1024
+      analyser.fftSize = 256
 
       var audioInput = context.createMediaStreamSource(stream)
 
