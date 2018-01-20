@@ -3,10 +3,12 @@ import styled from 'styled-components';
 import Slider from 'material-ui/Slider';
 import Button from './Button';
 import { labels, colors } from './levels';
-import headerImage from './images/start.png'
+import headerImage from './images/start.png';
+import SelectIllustration from './SelectIllustration'
 
 const Wrapper = styled.div`
 width: 100%;
+min-height: 700px;
 height: 100%;
 display: flex;
 flex-direction: column;
@@ -26,7 +28,7 @@ const Slogan = styled.h2`
 color: white;
 font-weight: bold;
 font-size: 30px;
-margin-top: 0;
+margin: 0;
 `
 
 const Title = styled.h3`
@@ -51,7 +53,7 @@ export default class extends React.Component {
     window.ga('send', 'pageview')
   }
   render () {
-    const { duration, level, onDurationChange, onLevelChange, onSubmit } = this.props
+    const { duration, level, illustrationIndex, onIllustrationChange, onDurationChange, onLevelChange, onSubmit } = this.props
     return (
       <Wrapper backgroundColor={colors[level]}>
         <Content>
@@ -78,6 +80,10 @@ export default class extends React.Component {
             sliderStyle={{height: '5px', marginTop: '6px'}}
             onChange={(event, newValue) => onLevelChange(newValue)}
             step={1}
+          />
+          <SelectIllustration
+            onSelect={onIllustrationChange}
+            index={illustrationIndex}
           />
         </Content>
         <Button onClick={onSubmit}>C'est parti !</Button>

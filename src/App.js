@@ -25,6 +25,7 @@ class App extends React.Component {
   state = {
     color: colors[0],
     levelThreshold: 1,
+    illustrationIndex: 0,
     isStarted: false,
     isPlaying: false,
     duration: 60000 * 55
@@ -74,12 +75,10 @@ class App extends React.Component {
 
   end = () => {
     this.stream.getTracks()[0].stop()
-    this.context.close()
   }
 
   reset = () => {
     this.stream.getTracks()[0].stop()
-    this.context.close()
     this.setState({
       isStarted: false,
       isPlaying: false,
@@ -97,8 +96,10 @@ class App extends React.Component {
         <SetupPage
           level={this.state.levelThreshold}
           duration={this.state.duration}
+          illustrationIndex={this.state.illustrationIndex}
           onDurationChange={(newValue) => this.setState({duration: newValue})}
           onLevelChange={(newValue) => this.setState({levelThreshold: newValue})}
+          onIllustrationChange={(index) => this.setState({illustrationIndex: index})}
           onSubmit={this.start}
         />
       )
@@ -106,6 +107,7 @@ class App extends React.Component {
     return (
       <IllustrationPage
         duration={this.state.duration}
+        illustrationIndex={this.state.illustrationIndex}
         color={this.state.color}
         level={this.state.levelThreshold}
         play={this.state.isStarted && this.state.isPlaying}

@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
-import Illustration from './illustration';
-import styled from 'styled-components';
-import anime from 'animejs';
-import { labels } from './levels';
-import Button from './Button';
+import React, { Component } from 'react'
+import styled from 'styled-components'
+import anime from 'animejs'
+import { labels } from './levels'
+import Button from './Button'
+import illustrations from './illustrations';
 
 const Wrapper = styled.div`
 width: 100%;
@@ -17,11 +17,22 @@ transition: background-color 500ms linear;
 padding-bottom: 20px;
 `
 
+const IllustrationWrapper = styled(({format, ...props}) => <div {...props} />)`
+width: ${props => 70 * props.format}vmin;
+@media print {
+  width: 100%;
+}
+`
+
 const Actions = styled.div`
 display: flex;
 @media print {
   display: none;
 }
+`
+
+const Action = styled.div`
+margin: 40px 20px;
 `
 
 class IllustrationPage extends Component {
@@ -55,13 +66,20 @@ class IllustrationPage extends Component {
   }
 
   render() {
-    const { color, print, reset } = this.props
+    const { color, print, reset, illustrationIndex } = this.props
+    const Illustration = illustrations[illustrationIndex].component
     return (
       <Wrapper backgroundColor={this.state.isFinished ? '#82b2ff' : color}>
-        <Illustration />
+        <IllustrationWrapper format={illustrations[illustrationIndex].format}>
+          <Illustration />
+        </IllustrationWrapper>
         <Actions>
-          { this.state.isFinished && <Button onClick={reset}>Recommencer</Button> }
-          { this.state.isFinished && <Button onClick={print}>Imprimer</Button> }
+          <Action>
+            { this.state.isFinished && <Button onClick={reset}>Recommencer</Button> }
+          </Action>
+          <Action>
+            { this.state.isFinished && <Button onClick={print}>Imprimer</Button> }
+          </Action>
         </Actions>
       </Wrapper>
     )

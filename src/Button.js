@@ -9,7 +9,7 @@ export default (props) => (
     borderRadius: '30px',
     minWidth: '130px',
     boxShadow: 'none',
-    margin: '40px 20px'
+    margin: '0'
   }}
   buttonStyle={{
     borderRadius: '30px',
